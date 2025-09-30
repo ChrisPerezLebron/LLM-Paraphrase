@@ -81,16 +81,16 @@
     <!-- bootstrap import -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-        var controller = new AbortController();
+        var controller;
         
 
         //handle cancel button click 
         function onCancel() {
-            controller.abort();
-            controller = new AbortController();
-            document.getElementById("submit_button").disabled = false;
-            document.getElementById("cancel_button").disabled = true; 
-
+            if (controller){
+                controller.abort();
+                document.getElementById("submit_button").disabled = false;
+                document.getElementById("cancel_button").disabled = true; 
+            }
 
         }
 
@@ -150,27 +150,41 @@
             });
 
             // Controller for canceling
-            const controller = new AbortController();
+            controller = new AbortController();
 
-            styles.forEach(style => {
-                fetch("/api/paraphrase_stream", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ text: inputText, style }),
-                    signal: controller.signal
-                }).then(async res => {
-                    const reader = res.body.getReader();
-                    const decoder = new TextDecoder();
-                    while(true) {
-                        const { done, value } = await reader.read();
-                        if(done) break;
+            // Create a promise for each stream
+            const streamPromises = styles.map(style => 
+                new Promise(async (resolve, reject) => {
+                    try {
+                        const response = await fetch("/api/paraphrase_stream", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({ text: inputText, style }),
+                            signal: controller.signal
+                        });
 
-                        const chunk = decoder.decode(value, { stream: true });
-                        document.getElementById(style + "Div").innerHTML += chunk;
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder();
+
+                        while(true) {
+                            const { done, value } = await reader.read();
+                            if(done) break;
+                            const chunk = decoder.decode(value, { stream: true });
+                            document.getElementById(style + "Div").innerHTML += chunk;
+                        }
+
+                        resolve(); // Stream complete
+                    } catch(err) {
+                        if(err.name === "AbortError") console.log(`${style} stream canceled`);
+                        reject(err);
                     }
-                }).catch(err => {
-                    if(err.name === "AbortError") console.log(`${style} stream canceled`);
-                });
+                })
+            );
+
+            // When all streams finish, reset buttons
+            Promise.allSettled(streamPromises).then(() => {
+                document.getElementById("submit_button").disabled = false;
+                document.getElementById("cancel_button").disabled = true;
             });
         }
     
