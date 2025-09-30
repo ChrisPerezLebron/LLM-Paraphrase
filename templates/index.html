@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Paraphraser</title>
+</head>
+<body>
+    <h1>Provide text below!</h1>
+
+    <textarea id="input_text" placeholder="Input text here..."> </textarea>
+    <button onclick="onSubmit()">Submit</button>
+
+    <script>
+        function onSubmit(){
+            console.log("button clicked");
+
+            inputText = document.getElementById("input_text").value;
+            
+            console.log(inputText);
+            fetch("/api/paraphrase", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: inputText})
+            })
+            .then(res => res.json())
+            .then(data => console.log(data));
+        }
+    </script>
+    
+</body>
+</html>
