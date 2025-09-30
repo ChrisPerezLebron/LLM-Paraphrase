@@ -19,7 +19,7 @@ def paraphrase():
     
     professionalPrompt = f''' 
         Rewrite the following text in a professional tone. Just respond with the professional version don't include any 
-        other explanation or preamble text:
+        other explanation or preamble text. Remove all quotation marks from your response:
 
         '{inputText}'
     '''
@@ -28,7 +28,7 @@ def paraphrase():
 
     politePrompt = f''' 
         Rewrite the following text in a polite tone. Just respond with the polite version don't include any 
-        other explanation or preamble text:
+        other explanation or preamble text. Remove all quotation marks from your response:
 
         '{inputText}'
     '''
@@ -37,7 +37,7 @@ def paraphrase():
 
     casualPrompt = f''' 
         Rewrite the following text in a casual tone. Just respond with the casual version don't include any 
-        other explanation or preamble text:
+        other explanation or preamble text. Remove all quotation marks from your response:
 
         '{inputText}'
     '''
@@ -47,7 +47,8 @@ def paraphrase():
     socialMediaPrompt = f''' 
         Rewrite the following text in a social media tone. That is, in a tone suitable for social media posts and ultra 
         casual conversations. Remember, text on social media tends to use lots of emojis and slang. Just respond with 
-        the social media version don't include any other explanation or preamble text:
+        the social media version don't include any other explanation or preamble text. Remove all quotation marks from 
+        your response:
 
         '{inputText}'
     '''
