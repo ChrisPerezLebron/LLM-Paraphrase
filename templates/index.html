@@ -92,7 +92,24 @@
                 body: JSON.stringify({ text: inputText})
             })
             .then(res => res.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+
+                console.log(data['professional'])
+
+                professionalDiv = document.getElementById("professionalDiv");
+                professionalDiv.innerHTML = data['professional'];
+
+                casualDiv = document.getElementById("casualDiv");
+                casualDiv.innerHTML = data['casual'];
+
+                politeDiv = document.getElementById("politeDiv");
+                politeDiv.innerHTML = data['polite'];
+
+                socialMediaDiv = document.getElementById("socialMediaDiv");
+                socialMediaDiv.innerHTML = data['social-media'];
+
+            });
         }
     </script>
     
