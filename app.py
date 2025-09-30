@@ -14,8 +14,8 @@ def paraphrase():
     data = request.get_json()
 
     inputText = data.get("text")
-    print(type(inputText))
-    print(inputText)
+    # print(type(inputText))
+    # print(inputText)
     
     professionalPrompt = f''' 
         Rewrite the following text in a professional tone. Just respond with the professional version don't include any 
@@ -52,8 +52,6 @@ def paraphrase():
         '{inputText}'
     '''
     socialMediaResponse =  ollama.generate(model="llama3.2", prompt=socialMediaPrompt)
-
-
     
 
     return jsonify({"professional": professionalResponse['response'],
