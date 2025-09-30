@@ -8,11 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <!-- <h1>Provide text below!</h1>
-
-    <textarea id="input_text" placeholder="Input text here..."> </textarea>
-    <button onclick="onSubmit()">Submit</button> -->
-    
     <div class="container mt-5">
         <h3 class="mb-4">Provide text below!</h3>
 
@@ -82,7 +77,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
         var controller;
-        
 
         //handle cancel button click 
         function onCancel() {
@@ -94,7 +88,8 @@
 
         }
 
-        //handle submit button click
+        //handle submit button click (unstreamed)
+        //NOTE: depricated in favor of streamed version 
         function onSubmit(){
             console.log("button clicked");
 
@@ -136,6 +131,7 @@
             });
         }
 
+        //handle submit for streaming version
         function onSubmitStream() {
             const styles = ["professional", "casual", "polite", "socialMedia"];
             const inputText = document.getElementById("input_text").value;
@@ -189,7 +185,7 @@
         }
     
 
-        //event listener to modify submit button state
+        //event listener to modify submit button state when text field is modified
         document.addEventListener("DOMContentLoaded", function() {
             const textarea = document.getElementById("input_text");
             const button = document.getElementById("submit_button");

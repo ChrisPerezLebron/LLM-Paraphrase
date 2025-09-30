@@ -5,17 +5,17 @@ import ollama
 app = Flask(__name__)
 ollama.pull('llama3.2')
 
+# display homepage
 @app.route("/")
 def main_page():
     return render_template("index.html")
 
+# return rephrased content (no streaming)
 @app.route("/api/paraphrase", methods=['POST'])
 def paraphrase():
     data = request.get_json()
 
     inputText = data.get("text")
-    # print(type(inputText))
-    # print(inputText)
     
     professionalPrompt = f''' 
         Rewrite the following text in a professional tone. Just respond with the professional version don't include any 
@@ -62,6 +62,7 @@ def paraphrase():
                     }), 200
 
 
+# stream rephrased content 
 @app.route("/api/paraphrase_stream", methods=['POST'])
 def paraphrase_stream():
     data = request.get_json()
