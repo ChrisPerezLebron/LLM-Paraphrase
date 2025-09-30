@@ -21,7 +21,7 @@
                 <label for="input_text" class="form-label">Input Text</label>
                 <textarea class="form-control" id="input_text" rows="4" placeholder="Enter text to paraphrase..."></textarea>
             </div>
-            <button onclick="onSubmit()" id='submit_button' class="btn btn-primary" disabled>Process</button>
+            <button onclick="onSubmitStream()" id='submit_button' class="btn btn-primary" disabled>Process</button>
             <button onclick="onCancel()" id='cancel_button' type="button" class="btn btn-danger" disabled>Cancel</button>
         </div>
 
@@ -135,6 +135,45 @@
                 document.getElementById("cancel_button").disabled = true; 
             });
         }
+
+        function onSubmitStream() {
+            const styles = ["professional", "casual", "polite", "socialMedia"];
+            const inputText = document.getElementById("input_text").value;
+
+            // Disable buttons while streaming
+            document.getElementById("submit_button").disabled = true;
+            document.getElementById("cancel_button").disabled = false;
+
+            // Clear previous outputs
+            styles.forEach(style => {
+                document.getElementById(style + "Div").innerHTML = "";
+            });
+
+            // Controller for canceling
+            const controller = new AbortController();
+
+            styles.forEach(style => {
+                fetch("/api/paraphrase_stream", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ text: inputText, style }),
+                    signal: controller.signal
+                }).then(async res => {
+                    const reader = res.body.getReader();
+                    const decoder = new TextDecoder();
+                    while(true) {
+                        const { done, value } = await reader.read();
+                        if(done) break;
+
+                        const chunk = decoder.decode(value, { stream: true });
+                        document.getElementById(style + "Div").innerHTML += chunk;
+                    }
+                }).catch(err => {
+                    if(err.name === "AbortError") console.log(`${style} stream canceled`);
+                });
+            });
+        }
+    
 
         //event listener to modify submit button state
         document.addEventListener("DOMContentLoaded", function() {
