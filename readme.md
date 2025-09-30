@@ -15,12 +15,25 @@ A single-page application (SPA) that rephrases user input into different writing
 
 ### Steps
 1. Clone the repository
-    '''
-    
+   
         git clone https://github.com/<your-username>/ai-writing-assistant.git
         cd ai-writing-assistant
-    ''' 
-2. Build and start the containers
-    ''' docker compose up --build '''
-3. Once the containers are running, open your browser and navigate to:
-    '''http://127.0.0.1:5001/'''
+3. Build and start the containers
+   
+        docker compose up --build
+5. Once the containers are running, open your browser and navigate to:
+   
+        http://127.0.0.1:5001/
+
+## 📝 Assumptions
+- The app uses Ollama as the LLM backend, running inside Docker.   
+- Backend and Ollama communicate over Docker’s internal network.
+- The frontend connects to the backend at port 5001.
+- No external API keys are required to run this project locally.
+- Tested on macOS and Linux with Docker Desktop.
+
+## 🔧 Tech Stack
+- Frontend: HTML, CSS, JavaScript, Bootstrap
+- Backend: Python (Flask)
+- LLM: Ollama
+- Containerization: Docker (Leveraging Docker Compose)
