@@ -1,0 +1,21 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"  # Default Ollama port
+    volumes:
+      - ollama-data:/root/.ollama  # Persist models/data
+
+  backend:
+    build: .
+    container_name: ai-paraphraser
+    ports:
+      - "5001:5001"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434  # Use Docker service name for hostname
+    depends_on:
+      - ollama
+
+volumes:
+  ollama-data:

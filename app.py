@@ -3,6 +3,7 @@ import json
 import ollama
 
 app = Flask(__name__)
+
 ollama.pull('llama3.2')
 
 # display homepage
@@ -110,3 +111,6 @@ def paraphrase_stream():
             yield token_text
 
     return Response(generate_tokens(), mimetype="text/plain")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001, debug=False)
