@@ -21,7 +21,8 @@
                 <label for="input_text" class="form-label">Input Text</label>
                 <textarea class="form-control" id="input_text" rows="4" placeholder="Enter text to paraphrase..."></textarea>
             </div>
-            <button onclick="onSubmit()" class="btn btn-primary">Submit</button>
+            <button onclick="onSubmit()" id='submit_button' class="btn btn-primary" disabled>Process</button>
+            <button onclick="onCancel()" id='cancel_button' type="button" class="btn btn-danger" disabled>Cancel</button>
         </div>
 
         <div class="container">
@@ -80,14 +81,35 @@
     <!-- bootstrap import -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
+        var controller = new AbortController();
+        
+
+        //handle cancel button click 
+        function onCancel() {
+            controller.abort();
+            controller = new AbortController();
+            document.getElementById("submit_button").disabled = false;
+            document.getElementById("cancel_button").disabled = true; 
+
+
+        }
+
+        //handle submit button click
         function onSubmit(){
             console.log("button clicked");
 
+            var signal = controller.signal;
+    
+
             inputText = document.getElementById("input_text").value;
+
+            document.getElementById("submit_button").disabled = true;
+            document.getElementById("cancel_button").disabled = false; 
 
             console.log(inputText);
             fetch("/api/paraphrase", {
                 method: "POST",
+                signal: signal,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text: inputText})
             })
@@ -109,8 +131,28 @@
                 socialMediaDiv = document.getElementById("socialMediaDiv");
                 socialMediaDiv.innerHTML = data['social-media'];
 
+                document.getElementById("submit_button").disabled = false;
+                document.getElementById("cancel_button").disabled = true; 
             });
         }
+
+        //event listener to modify submit button state
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById("input_text");
+            const button = document.getElementById("submit_button");
+
+            // Initially disable the button
+            button.disabled = true;
+
+            // Listen for input events
+            textarea.addEventListener("input", function() {
+                if (textarea.value.trim() !== "") {
+                    button.disabled = false; // Enable button
+                } else {
+                    button.disabled = true; // Disable button
+                }
+            });
+        });
     </script>
     
 </body>
