@@ -16,8 +16,8 @@ A single-page application (SPA) that rephrases user input into different writing
 ### Steps
 1. Clone the repository
    
-         git clone https://github.com/<your-username>/ai-writing-assistant.git
-         cd ai-writing-assistant
+         git clone https://github.com/ChrisPerezLebron/LLM-Paraphrase.git
+         cd LLM-Paraphrase
 2. Add your OpenAPI key to the .example_env file
 
          OPENAI_API_KEY = '...'
