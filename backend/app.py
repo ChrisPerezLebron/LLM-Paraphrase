@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, render_template, request, Response
 import json
 import ollama
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
@@ -69,6 +72,7 @@ def paraphrase_stream():
     data = request.get_json()
     input_text = data.get("text", "")
     style = data.get("style", "professional")
+    useChatGPT = data.get("useChatGPT", False)
 
     prompt = None
     if style == "professional": 
@@ -103,12 +107,39 @@ def paraphrase_stream():
         '''
 
 
+    # def generate_tokens():
+    #     # Generate tokens from Ollama (streaming)
+    #     for token in ollama.generate(model="llama3.2", stream=True, prompt=prompt):
+    #         # Send each token as JSON lines
+    #         token_text = token.response
+    #         yield token_text
+
+    
+    print(f"USING {'openAI' if useChatGPT else 'Ollama'}")
+
     def generate_tokens():
-        # Generate tokens from Ollama (streaming)
-        for token in ollama.generate(model="llama3.2", stream=True, prompt=prompt):
-            # Send each token as JSON lines
-            token_text = token.response
-            yield token_text
+        
+        if useChatGPT:
+            load_dotenv()
+            api_key = os.getenv('OPENAI_API_KEY')
+            if not api_key:
+                raise ValueError("OPENAI_API_KEY not found in environment!")
+            openai_client = OpenAI(api_key=api_key)
+            # Stream from OpenAI ChatGPT
+            stream = openai_client.chat.completions.create(
+                model="gpt-5-nano",  # or gpt-4o, gpt-3.5-turbo, etc.
+                messages=[{"role": "user", "content": prompt}],
+                stream=True,
+            )
+            for chunk in stream:
+                delta = chunk.choices[0].delta
+                if delta and delta.content:
+                    yield delta.content
+
+        else:
+            # Stream from Ollama
+            for token in ollama.generate(model="llama3.2", stream=True, prompt=prompt):
+                yield token.response
 
     return Response(generate_tokens(), mimetype="text/plain")
 

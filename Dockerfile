@@ -9,5 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend source code
 COPY backend/ .
 
+# Copy env file
+COPY .env .
+
 EXPOSE 5001
 CMD ["python", "app.py"]

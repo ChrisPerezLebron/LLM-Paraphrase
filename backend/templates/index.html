@@ -18,6 +18,15 @@
             </div>
             <button onclick="onSubmitStream()" id='submit_button' class="btn btn-primary" disabled>Process</button>
             <button onclick="onCancel()" id='cancel_button' type="button" class="btn btn-danger" disabled>Cancel</button>
+
+            <div class="form-check form-check-inline ms-1">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="useOllamaRadio" value="option1" checked="checked">
+                <label class="form-check-label" for="useOllamaRadio">Ollama (llama3.2)</label>
+            </div>
+            <div class="form-check form-check-inline ms-1">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="useChatGPTRadio" value="option2">
+                <label class="form-check-label" for="useChatGPTRadio">OpenAI (gpt-5-nano)</label>
+            </div>
         </div>
 
         <div class="container">
@@ -155,7 +164,11 @@
                         const response = await fetch("/api/paraphrase_stream", {
                             method: "POST",
                             headers: {"Content-Type": "application/json"},
-                            body: JSON.stringify({ text: inputText, style }),
+                            body: JSON.stringify({ 
+                                useChatGPT: document.getElementById("useChatGPTRadio").checked,
+                                text: inputText, 
+                                style 
+                            }),
                             signal: controller.signal
                         });
 
