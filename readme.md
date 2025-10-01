@@ -3,7 +3,7 @@ A single-page application (SPA) that rephrases user input into different writing
 
 ## 🚀 Features
 - Input any text and rephrase it into multiple styles.
-- Styles supported: Professional, Casual, Polite, Social-Media.\
+- Styles supported: Professional, Casual, Polite, Social-Media.
 - Real-time streaming output as the model generates responses.
 - Cancel button to stop an in-progress request.
 - Clean, production-like UI using modern frontend practices.
@@ -16,24 +16,29 @@ A single-page application (SPA) that rephrases user input into different writing
 ### Steps
 1. Clone the repository
    
-        git clone https://github.com/<your-username>/ai-writing-assistant.git
-        cd ai-writing-assistant
-3. Build and start the containers
+         git clone https://github.com/<your-username>/ai-writing-assistant.git
+         cd ai-writing-assistant
+2. Add your OpenAPI key to the .env file
+
+         OPENAI_API_KEY = '...'
+4. Build and start the containers
    
-        docker compose up --build
+         docker compose up --build
 5. Once the containers are running, open your browser and navigate to:
    
         http://127.0.0.1:5001/
 
 ## 📝 Assumptions
-- The app uses Ollama as the LLM backend, running inside Docker.   
-- Backend and Ollama communicate over Docker’s internal network.
-- The frontend connects to the backend at port 5001.
-- No external API keys are required to run this project locally.
-- Tested on macOS and Linux with Docker Desktop.
+- The application supports two LLM providers:
+  - **Ollama**, running as a local service within Docker Compose  
+  - **OpenAI**, using the OpenAI API (requires an API key if enabled)
+- The backend communicates with Ollama over Docker’s internal network.
+- The frontend interacts with the backend through port **5001**.
+- Running with Ollama does **not** require any external API keys.
+- The project has been tested on macOS and Linux using Docker Desktop.
 
 ## 🔧 Tech Stack
 - Frontend: HTML, CSS, JavaScript, Bootstrap
 - Backend: Python (Flask)
-- LLM: Ollama
+- LLM: Ollama, OpenAI
 - Containerization: Docker (Leveraging Docker Compose)
