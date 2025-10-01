@@ -106,17 +106,6 @@ def paraphrase_stream():
             '{input_text}'
         '''
 
-
-    # def generate_tokens():
-    #     # Generate tokens from Ollama (streaming)
-    #     for token in ollama.generate(model="llama3.2", stream=True, prompt=prompt):
-    #         # Send each token as JSON lines
-    #         token_text = token.response
-    #         yield token_text
-
-    
-    print(f"USING {'openAI' if useChatGPT else 'Ollama'}")
-
     def generate_tokens():
         
         if useChatGPT:
@@ -125,6 +114,7 @@ def paraphrase_stream():
             if not api_key:
                 raise ValueError("OPENAI_API_KEY not found in environment!")
             openai_client = OpenAI(api_key=api_key)
+            
             # Stream from OpenAI ChatGPT
             stream = openai_client.chat.completions.create(
                 model="gpt-5-nano",  # or gpt-4o, gpt-3.5-turbo, etc.
