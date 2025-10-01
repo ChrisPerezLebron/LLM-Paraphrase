@@ -1,3 +1,4 @@
 .env
 __pycache__/
 backend/.DS_Store
+.DS_Store
