@@ -18,9 +18,10 @@ A single-page application (SPA) that rephrases user input into different writing
    
          git clone https://github.com/<your-username>/ai-writing-assistant.git
          cd ai-writing-assistant
-2. Add your OpenAPI key to the .env file
+2. Add your OpenAPI key to the .example_env file
 
          OPENAI_API_KEY = '...'
+3. Rename .example_env to .env
 4. Build and start the containers
    
          docker compose up --build
